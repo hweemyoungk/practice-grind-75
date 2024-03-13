@@ -1,0 +1,84 @@
+# [3/13/2024]Time up
+""" 
+Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+
+Notice that the solution set must not contain duplicate triplets.
+
+ 
+
+Example 1:
+
+Input: nums = [-1,0,1,2,-1,-4]
+Output: [[-1,-1,2],[-1,0,1]]
+Explanation: 
+nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0.
+nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.
+nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0.
+The distinct triplets are [-1,0,1] and [-1,-1,2].
+Notice that the order of the output and the order of the triplets does not matter.
+Example 2:
+
+Input: nums = [0,1,1]
+Output: []
+Explanation: The only possible triplet does not sum up to 0.
+Example 3:
+
+Input: nums = [0,0,0]
+Output: [[0,0,0]]
+Explanation: The only possible triplet sums up to 0.
+ 
+
+Constraints:
+
+3 <= nums.length <= 3000
+-10^5 <= nums[i] <= 10^5
+ """
+from typing import Dict, List, Set, Tuple
+
+
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        self.ans = []
+        l=len(nums)
+        
+        nums.sort()
+        prev = None
+        for i in range(l):
+            if 0 < nums[i]:
+                break
+            if nums[i] == prev:
+                continue
+            self.twoSum(nums[i+1:], -nums[i])
+            prev = nums[i]
+        
+        return self.ans
+    
+    def twoSum(self, sortedNums: List[int], target: int):
+        if len(sortedNums)==0:
+            return
+        
+        # Two pointers
+        left=0
+        prevLo = None
+        right=len(sortedNums)-1
+        prevHi = None
+        while left<right:
+            if prevLo == sortedNums[left]:
+                left+=1
+                continue
+            if prevHi == sortedNums[right]:
+                right-=1
+                continue
+            sum=sortedNums[left]+sortedNums[right]
+            if sum<target:
+                left+=1
+                continue
+            if sum>target:
+                right-=1
+                continue
+            self.ans.append([-target, sortedNums[left], sortedNums[right]])
+            prevLo = sortedNums[left]
+            prevHi = sortedNums[right]
+            left+=1
+            right-=1
+        return
