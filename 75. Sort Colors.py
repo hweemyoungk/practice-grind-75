@@ -34,44 +34,20 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
-        l = len(nums)
-        # Cocktail sort
-        lo=0
-        hi=l-1
-        while lo<hi:
-            left = nums[lo]
-            right = nums[hi]
-            if left == 0:
-                lo+=1
+        l=len(nums)
+        p0=0
+        p2=l-1
+        for i in range(l):
+            n=nums[i]
+            if n == 0:
+                p0+=1
                 continue
-            if right == 2:
-                hi-=1
+            if n == 2:
+                p2-=1
                 continue
-            # left:1 or 2 and right is 0 or 1
-            if left == 2:
-                nums[lo], nums[hi-1] = nums[hi-1], 2
-                hi-=1
-                continue
-            if right == 0:
-                nums[lo+1], nums[hi] = 0, nums[lo+1]
-                lo+=1
-                continue
-            # left==1 and right==1
-            iNonOne=lo+1
-            while iNonOne<hi:
-                n = nums[iNonOne]
-                if n == 1:
-                    iNonOne+=1
-                    continue
-                if n == 0:
-                    nums[lo], nums[iNonOne] = 0, 1
-                    lo+=1
-                    iNonOne+=1
-                    continue
-                nums[iNonOne], nums[hi] = 1, 2
-                hi-=1
-                iNonOne+=1
-                
-            return
-            
-
+            # n==1
+            continue
+        nums[:p0]=[0]*p0
+        nums[p0:p2-1]=[1]*(p2-1-p0)
+        nums[p2-1:]=[2]*(l-p2+1)
+    
