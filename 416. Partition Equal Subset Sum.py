@@ -1,3 +1,5 @@
+# [3/16/2024]Time up
+# 51%/19%
 """ 
 Given an integer array nums, return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or false otherwise.
 
@@ -20,18 +22,37 @@ Constraints:
 1 <= nums.length <= 200
 1 <= nums[i] <= 100
  """
-from typing import List
+from typing import List, Tuple
 
 
 class Solution:
-    # Sort + two pointers
     def canPartition(self, nums: List[int]) -> bool:
-        l=len(nums)
-        nums.sort()
-        i=0
-        j=l-1
-        sumLo=0
-        sumHi=0
-        while i<j:
-            lo=nums[i]
-            hi=nums[j]
+        totalSum = sum(nums)
+        if totalSum&1 != 0:
+            return False
+        subSetSum = totalSum>>1
+        self.nums=nums
+        self.l = len(nums)
+        self.memo: set[Tuple[int, int]] = set()  # Impossible (target, iIncluding) pairs
+        return self.dfs(0, subSetSum)
+    
+    def dfs(self, iIncluding: int, target: int) -> bool:
+        if (target, iIncluding) in self.memo:
+            return False
+        
+        # Corner case
+        if target==0:
+            return True
+        if target<0:
+            self.memo.add((target, iIncluding))
+            return False
+        if iIncluding==self.l:
+            # All num excluded but still positive target
+            return False
+        
+        # With/Without iIncluding
+        if self.dfs(iIncluding+1, target-self.nums[iIncluding]) or self.dfs(iIncluding+1, target):
+            return True
+        self.memo.add((target, iIncluding))
+        return False
+        

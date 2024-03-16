@@ -1,22 +1,36 @@
 from typing import List
 
-from templates.binary_insert import binary_insert
 
-# Returns index of target or -1 if not found.
+# Returns index of num if found or complement of index for num to be inserted at.
 # Array must already been sorted in ascending order.
-# Very similar to binary insert.
-# Get index using binary insert and check arr[index] matches target
-def binary_search(arr: List[int], target: int) -> int:
-    if len(arr) == 0:
-        return -1
+def binary_search(arr: List[int], num: int) -> int:
+    l = len(arr)
+    # Corner case
+    if l == 0:
+        return ~0
+    if l == 1:
+        if num == arr[0]:
+            return 0
+        return ~0 if num < arr[0] else ~1
     
-    index = binary_insert(arr, target)
-    if index == len(arr):
-        # Out of range
-        return -1
-    if target != arr[index]:
-        # Not exists
-        return -1
-    
-    return index
-    
+    lo = 0  # Inclusive
+    hi = l-1  # Inclusive
+    while lo <= hi:
+        mid = (lo+hi+1)//2
+        medium = arr[mid]
+        if num < medium:
+            index = mid-1
+            hi = mid-1
+            continue
+        if medium < num:
+            index = mid+1
+            lo = mid+1
+            continue
+        # Match: break
+        return mid
+    # Not found
+    if index==-1:
+        return ~0
+    # if index==l:
+    #     return ~l
+    return ~index
